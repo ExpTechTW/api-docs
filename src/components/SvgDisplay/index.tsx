@@ -1,4 +1,4 @@
-import { JSX, useEffect, useRef, useState } from "react";
+import { JSX, useEffect, useRef } from "react";
 import styles from "./styles.module.css";
 
 type SvgDisplayProps = {
