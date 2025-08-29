@@ -28,6 +28,77 @@ lb-\*.exptech.dev 為指定 Balance Server，若不加編號則由 DNS 自動分
 
 :::
 
-## 驗證
+## 連接
+
+```json
+{
+  "type": "start", // 類型
+  "token": "<token>", // 驗證 Token (Service)
+  "topic": ["<topic>"] // 欲訂閱主題
+}
+```
+
+## 回應
+
+### 連接成功
+
+```json
+{
+  "type": "info", // 類型
+  "event": "connect", // 事件
+  "topic": {
+    "success": ["websocket.trem.rts.v1"], // 訂閱成功主題
+    "failed": [] // 訂閱失敗主題
+  },
+  "time": 1724935200000 // 時間 (Unix Timestamp)
+}
+```
+
+### 連接失敗
+
+#### Reason 類型
+
+- `Token has been revoked` Token 已被註銷 (在 Web 控制面板)
+- `Invalid message format` 訊息格式錯誤
+- `Token required` 未提供 Token (Service)
+- `Token invalid` Token (Service) 無效
+- `Monthly calls quota exceeded (xxx/xxx)` 月呼叫次數超過限制 (xxx 根據實際情況)
+- `Monthly bytes quota exceeded (xxx/xxx)` 月流量超過限制 (xxx 根據實際情況)
+- `Server error` 伺服器錯誤
+
+```json
+{
+  "type": "info", // 類型
+  "event": "disconnect", // 事件
+  "msg": "<reason>", // 訊息
+  "time": 1724935200000 // 時間 (Unix Timestamp)
+}
+```
+
+### NTP
+
+```json
+{
+  "type": "ntp", // 類型
+  "time": 1724935200000 // 時間 (Unix Timestamp)
+}
+```
+
+### 資料
+
+```json
+{
+  "type": "data", // 類型
+  "topic": "websocket.trem.rts.v1", // 主題
+  "payload": "<payload>", // 資料
+  "time": 1724935200000 // 時間 (Unix Timestamp)
+}
+```
 
 ## 訂閱
+
+下方列出可供訂閱的主題。
+
+### RTS
+
+- `websocket.trem.rts.v1`
