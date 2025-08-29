@@ -5,6 +5,7 @@ import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
+import { JSX } from 'react';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
@@ -24,8 +25,8 @@ export default function Home(): JSX.Element {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={`ExpTech Studio`}
+      description="ExpTech Studio 技術文件">
       <HomepageHeader />
     </Layout>
   );
