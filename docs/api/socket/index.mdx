@@ -84,6 +84,12 @@ lb-\*.exptech.dev 為指定 Balance Server，若不加編號則由 DNS 自動分
 }
 ```
 
+:::tip
+
+連接成功的情況下，將每 60 秒收到一次 NTP 資訊。(不保證間格一定是 60 秒)
+
+:::
+
 ### 資料
 
 ```json
@@ -94,6 +100,11 @@ lb-\*.exptech.dev 為指定 Balance Server，若不加編號則由 DNS 自動分
   "time": 1724935200000 // 時間 (Unix Timestamp)
 }
 ```
+
+:::tip
+
+收到的 data 內 topic 會跟成功訂閱的 topic 呼應，所以格式更新時可選擇訂閱 v2 (`websocket.trem.rts.v2`) 或是繼續使用 v1 ，但要注意棄用時間 (有 v2 後通常 v1 會在一段時間後棄用)。
+:::
 
 ## 訂閱
 
