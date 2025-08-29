@@ -47,6 +47,8 @@ export default function ApiEndpoint({
     Object.keys(responses)[0] || "200"
   );
   const [copied, setCopied] = useState(false);
+  const [paramsCollapsed, setParamsCollapsed] = useState(true);
+  const [responsesCollapsed, setResponsesCollapsed] = useState(true);
   
   const currentBaseUrl = normalizedBaseUrls[selectedBaseUrl]?.url || '';
   const fullUrl = `${currentBaseUrl}${endpoint}`;
@@ -110,48 +112,116 @@ export default function ApiEndpoint({
       
       {params.length > 0 && (
         <div className={styles.section}>
-          <h4 className={styles.sectionTitle}>參數</h4>
-          <div className={styles.paramsList}>
-            {params.map((param) => (
-              <div key={param.name} className={styles.param}>
-                <div className={styles.paramHeader}>
-                  <code className={styles.paramName}>{param.name}</code>
-                  {param.type && <span className={styles.paramType}>{param.type}</span>}
-                  {param.optional && <span className={styles.optional}>optional</span>}
+          <div className={styles.collapsibleHeader} onClick={() => setParamsCollapsed(!paramsCollapsed)}>
+            <div className={styles.titleContainer}>
+              <h4 className={styles.sectionTitle}>參數</h4>
+              {paramsCollapsed && (
+                <div className={styles.previewTags}>
+                  {params.slice(0, 3).map((param, index) => (
+                    <span key={index} className={`${styles.previewTag} ${param.optional ? styles.optional : styles.required}`}>
+                      {param.name}
+                    </span>
+                  ))}
+                  {params.length > 3 && (
+                    <span className={styles.moreCount}>+{params.length - 3}</span>
+                  )}
                 </div>
-                <div className={styles.paramDescription}>
-                  {param.description}
-                  {param.default && <span className={styles.default}> (預設: {param.default})</span>}
-                </div>
-              </div>
-            ))}
+              )}
+            </div>
+            <button className={styles.collapseButton}>
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 16 16" 
+                fill="currentColor"
+                style={{ transform: paramsCollapsed ? 'rotate(0deg)' : 'rotate(90deg)' }}
+              >
+                <path d="M6 4l4 4-4 4V4z"/>
+              </svg>
+            </button>
           </div>
+          {!paramsCollapsed && (
+            <div className={styles.paramsList}>
+              {params.map((param) => (
+                <div key={param.name} className={styles.param}>
+                  <div className={styles.paramHeader}>
+                    <code className={styles.paramName}>{param.name}</code>
+                    {param.type && <span className={styles.paramType}>{param.type}</span>}
+                    {param.optional && <span className={styles.optional}>optional</span>}
+                  </div>
+                  <div className={styles.paramDescription}>
+                    {param.description}
+                    {param.default && <span className={styles.default}> (預設: {param.default})</span>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
       
       {Object.keys(responses).length > 0 && (
         <div className={styles.section}>
-          <div className={styles.responseHeader}>
-            <h4 className={styles.sectionTitle}>回傳</h4>
-            <select
-              className={`${styles.statusSelect} ${getStatusColor(selectedStatus)}`}
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              {Object.keys(responses).map((status) => (
-                <option key={status} value={status}>
-                  {status} {responses[status].description && `- ${responses[status].description}`}
-                </option>
-              ))}
-            </select>
+          <div className={styles.collapsibleHeader} onClick={() => setResponsesCollapsed(!responsesCollapsed)}>
+            <div className={styles.titleContainer}>
+              <h4 className={styles.sectionTitle}>回傳</h4>
+              {responsesCollapsed && (
+                <div className={styles.previewTags}>
+                  {Object.keys(responses).slice(0, 4).map((status) => {
+                    const code = parseInt(status);
+                    let statusType = 'default';
+                    if (code >= 200 && code < 300) statusType = 'success';
+                    else if (code >= 400 && code < 500) statusType = 'error';
+                    else if (code >= 500) statusType = 'serverError';
+                    
+                    return (
+                      <span key={status} className={`${styles.previewTag} ${styles[statusType]}`}>
+                        {status}
+                      </span>
+                    );
+                  })}
+                  {Object.keys(responses).length > 4 && (
+                    <span className={styles.moreCount}>+{Object.keys(responses).length - 4}</span>
+                  )}
+                </div>
+              )}
+            </div>
+            <button className={styles.collapseButton}>
+              <svg 
+                width="16" 
+                height="16" 
+                viewBox="0 0 16 16" 
+                fill="currentColor"
+                style={{ transform: responsesCollapsed ? 'rotate(0deg)' : 'rotate(90deg)' }}
+              >
+                <path d="M6 4l4 4-4 4V4z"/>
+              </svg>
+            </button>
           </div>
-          <pre className={styles.codeBlock}>
-            <code 
-              dangerouslySetInnerHTML={{ 
-                __html: highlightJSON(JSON.stringify(responses[selectedStatus]?.data, null, 2))
-              }}
-            />
-          </pre>
+          {!responsesCollapsed && (
+            <>
+              <div className={styles.responseHeader}>
+                <select
+                  className={`${styles.statusSelect} ${getStatusColor(selectedStatus)}`}
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                >
+                  {Object.keys(responses).map((status) => (
+                    <option key={status} value={status}>
+                      {status} {responses[status].description && `- ${responses[status].description}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <pre className={styles.codeBlock}>
+                <code 
+                  dangerouslySetInnerHTML={{ 
+                    __html: highlightJSON(JSON.stringify(responses[selectedStatus]?.data, null, 2))
+                  }}
+                />
+              </pre>
+            </>
+          )}
         </div>
       )}
     </div>
