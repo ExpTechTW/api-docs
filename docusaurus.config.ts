@@ -52,7 +52,7 @@ const config: Config = {
       items: [
         {
           type: "docSidebar",
-          sidebarId: "tremSidebar",
+          sidebarId: "apiSidebar",
           position: "left",
           label: "技術文件",
         },
@@ -74,8 +74,8 @@ const config: Config = {
           title: "文件",
           items: [
             {
-              label: "TREM",
-              to: "/docs/trem/start/",
+              label: "API",
+              to: "/docs/api/start/",
             },
           ],
         },
