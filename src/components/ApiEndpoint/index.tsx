@@ -1,6 +1,16 @@
 import { JSX, useState } from "react";
 import styles from "./styles.module.css";
 
+const highlightJSON = (jsonString: string) => {
+  return jsonString
+    .replace(/("[\w\s]*")\s*:/g, '<span class="json-key">$1</span>:')
+    .replace(/:\s*(".*?")/g, ': <span class="json-string">$1</span>')
+    .replace(/:\s*(\d+)/g, ': <span class="json-number">$1</span>')
+    .replace(/:\s*(true|false)/g, ': <span class="json-boolean">$1</span>')
+    .replace(/:\s*(null)/g, ': <span class="json-null">$1</span>')
+    .replace(/(\[|\]|\{|\})/g, '<span class="json-bracket">$1</span>');
+};
+
 type ApiEndpointProps = {
   method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   baseUrls: Array<{
@@ -136,7 +146,11 @@ export default function ApiEndpoint({
             </select>
           </div>
           <pre className={styles.codeBlock}>
-            <code>{JSON.stringify(responses[selectedStatus]?.data, null, 2)}</code>
+            <code 
+              dangerouslySetInnerHTML={{ 
+                __html: highlightJSON(JSON.stringify(responses[selectedStatus]?.data, null, 2))
+              }}
+            />
           </pre>
         </div>
       )}
