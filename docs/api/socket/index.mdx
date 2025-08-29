@@ -3,3 +3,27 @@ sidebar_position: 4
 ---
 
 # Socket
+
+## Base URL
+
+### Balance
+
+- `https://lb.exptech.dev/ws`
+- `https://lb-1.exptech.dev/ws`
+- `https://lb-2.exptech.dev/ws`
+- `https://lb-3.exptech.dev/ws`
+- `https://lb-4.exptech.dev/ws`
+
+:::note
+
+lb-\*.exptech.dev 為指定 Balance Server，若不加編號則由 DNS 自動分配。
+
+:::
+
+:::warning
+
+由 DNS 自動分配的情況下，意味著當有 1 台伺服器故障時，請求成功率為 3/4(75%) 以下，建議手動管理要使用的 Base URL。
+
+參考 [手動處理 Base URL](../more/base-url)
+
+:::
