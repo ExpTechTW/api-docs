@@ -1,0 +1,101 @@
+---
+sidebar_position: 4
+---
+
+# 自定義日誌
+
+一個屬於擴充自己的日誌紀錄方式。
+
+## index.js
+
+```js
+const { TREM, Logger, MixinManager } = this.#ctx;
+// 傳入主視窗 Logger 類定義 (父類)
+// 導入新的自定義類 (繼承的子類)
+const { CustomLogger } = require("./logger").createCustomLogger(Logger);
+// 初始化自定義類
+this.logger = new CustomLogger("example");
+this.logger.info("info");
+```
+
+## test.js
+
+```js
+// 由於是單例模式，在 index.js 初始化後，即可在任何地方使用。
+const logger = require("./logger");
+logger.info("info");
+```
+
+## logger.js
+
+```js
+let globalInstance = null;
+let CustomLoggerClass = null;
+
+function createCustomLogger(BaseLogger) {
+  if (CustomLoggerClass && globalInstance)
+    return {
+      CustomLogger: CustomLoggerClass,
+      instance: globalInstance,
+    };
+
+  class CustomLogger extends BaseLogger {
+    constructor(prefix = "") {
+      super();
+
+      if (globalInstance) {
+        globalInstance.prefix = prefix;
+        return globalInstance;
+      }
+
+      this.prefix = prefix;
+      globalInstance = this;
+    }
+
+    _formatMessage(message, ...args) {
+      const formattedMessage = super._formatMessage(message, ...args);
+      return this.prefix
+        ? `[${this.prefix}] ${formattedMessage}`
+        : formattedMessage;
+    }
+  }
+
+  CustomLoggerClass = CustomLogger;
+
+  return {
+    CustomLogger,
+    instance: globalInstance,
+  };
+}
+
+function checkInitialized() {
+  if (!globalInstance)
+    throw new Error(
+      "Logger not initialized. Please call createCustomLogger first."
+    );
+}
+
+module.exports = {
+  createCustomLogger,
+  info: (...args) => {
+    checkInitialized();
+    return globalInstance.info(...args);
+  },
+  error: (...args) => {
+    checkInitialized();
+    return globalInstance.error(...args);
+  },
+  warn: (...args) => {
+    checkInitialized();
+    return globalInstance.warn(...args);
+  },
+  debug: (...args) => {
+    checkInitialized();
+    return globalInstance.debug(...args);
+  },
+  get prefix() {
+    checkInitialized();
+    return globalInstance.prefix;
+  },
+};
+```

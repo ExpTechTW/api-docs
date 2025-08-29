@@ -1,0 +1,72 @@
+---
+sidebar_position: 1
+---
+
+# 基本知識
+
+## TREM 擴充存放路徑？
+
+在 TREM 主視窗按下 F1(macOS fn+F1) 即可開啟存放 plugins 的資料夾。
+
+## 文件結構
+
+```
+example/
+    index.js
+    info.json
+```
+
+## index.js
+
+擴充套件的入口點
+
+### Class 形式
+
+```js
+class Plugin {
+  #ctx;
+
+  constructor(ctx) {
+    this.#ctx = ctx;
+  }
+
+  onLoad() {
+    const { TREM, logger, MixinManager } = this.#ctx;
+  }
+}
+
+module.exports = Plugin;
+```
+
+### Function 形式
+
+```js
+module.exports = function (ctx) {
+  ctx.on("load", () => {
+    const { TREM, logger, MixinManager } = ctx;
+  });
+};
+```
+
+## info.json
+
+定義擴充資訊的文件
+
+```json
+{
+  "version": "1.0.0", // 擴充版本
+  "description": {
+    "zh_tw": "TREM 範例擴充" // 擴充說明
+  },
+  "author": [
+    "YuYu1015" // 擴充作者
+  ],
+  "dependencies": {
+    "trem": ">=3.0.0" // 擴充所需的 CDPS 最低版本
+  },
+  "resources": [
+    "AGPL-3.0" // 擴充的開源協議
+  ],
+  "link": "https://github.com/ExpTechTW/TREM-Lite" // 擴充 的 GitHub Link
+}
+```
