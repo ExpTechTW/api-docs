@@ -2,6 +2,7 @@ import styles from "./styles.module.css";
 import GithubIcon from "@site/static/img/github.svg";
 
 import Translate, {translate} from '@docusaurus/Translate';
+import { JSX } from "react";
 
 type GithubRepositoryLinkProps = {
   url: string;

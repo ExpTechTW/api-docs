@@ -2,4 +2,68 @@
 sidebar_position: 3
 ---
 
+import ApiEndpoint from "@site/src/components/ApiEndpoint";
+
 # API
+
+## 地震報告
+
+### v1
+
+<ApiEndpoint
+  method="GET"
+  baseUrls={[
+    { name: "Production", url: "https://api.exptech.dev/api" },
+    { name: "Staging", url: "https://staging-api.exptech.dev/api" },
+  ]}
+  endpoint="/v1/report"
+  params={[
+    {
+      name: "limit",
+      type: "number",
+      optional: true,
+      description: "限制回傳數量，最大為 100",
+      default: "10",
+    },
+    {
+      name: "offset",
+      type: "number",
+      optional: true,
+      description: "偏移量",
+      default: "0",
+    },
+  ]}
+  responses={{
+    "200": {
+      description: "成功",
+      data: {
+        code: 200,
+        message: "success",
+        data: [],
+      },
+    },
+    "400": {
+      description: "錯誤請求",
+      data: {
+        code: 400,
+        message: "Invalid parameters",
+        error: "limit must be a positive number",
+      },
+    },
+    "403": {
+      description: "無權限",
+      data: {
+        code: 403,
+        message: "Forbidden",
+        error: "API key required",
+      },
+    },
+    "500": {
+      description: "伺服器錯誤",
+      data: {
+        code: 500,
+        message: "Internal server error",
+      },
+    },
+  }}
+/>
