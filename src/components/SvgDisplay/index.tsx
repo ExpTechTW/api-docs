@@ -11,7 +11,7 @@ type SvgDisplayProps = {
 export default function SvgDisplay({ 
   svg, 
   maxWidth = "100%",
-  backgroundColor = "transparent",
+  backgroundColor = "#1c1e21",
   darkMode = false
 }: SvgDisplayProps): JSX.Element {
   const containerRef = useRef<HTMLDivElement>(null);
