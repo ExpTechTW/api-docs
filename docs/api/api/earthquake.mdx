@@ -8,6 +8,12 @@ import ApiEndpoint from "@site/src/components/ApiEndpoint";
 
 ## v1
 
+:::danger
+
+不推薦使用，建議遷移至 v2。
+
+:::
+
 <ApiEndpoint
   method="GET"
   baseUrls={[
@@ -15,54 +21,43 @@ import ApiEndpoint from "@site/src/components/ApiEndpoint";
     { name: "API-1", url: "https://api-1.exptech.dev/api" },
     { name: "API-2", url: "https://api-2.exptech.dev/api" },
   ]}
-  endpoint="/v1/report"
-  params={[
-    {
-      name: "limit",
-      type: "number",
-      optional: true,
-      description: "限制回傳數量，最大為 100",
-      default: "10",
-    },
-    {
-      name: "offset",
-      type: "number",
-      optional: true,
-      description: "偏移量",
-      default: "0",
-    },
-  ]}
+  endpoint="/v1/eq/report"
   responses={{
     "200": {
       description: "成功",
-      data: {
-        code: 200,
-        message: "success",
-        data: [],
-      },
-    },
-    "400": {
-      description: "錯誤請求",
-      data: {
-        code: 400,
-        message: "Invalid parameters",
-        error: "limit must be a positive number",
-      },
-    },
-    "403": {
-      description: "無權限",
-      data: {
-        code: 403,
-        message: "Forbidden",
-        error: "API key required",
-      },
-    },
-    "500": {
-      description: "伺服器錯誤",
-      data: {
-        code: 500,
-        message: "Internal server error",
-      },
+      data: [
+        {
+          id: "CWA-EQ114000-2025-0829-100546",
+          no: 114000,
+          lat: 22.86,
+          lon: 121.28,
+          depth: 16.9,
+          loc: "臺東縣政府東北方  17.5  公里 (位於臺東縣近海)",
+          mag: 4,
+          time: 1756433146000,
+          list: {
+            臺東縣: {
+              int: 2,
+              town: {
+                東河: { lat: 22.97, lon: 121.3, int: 2 },
+                鹿野: { lat: 22.91, lon: 121.13, int: 2 },
+                臺東市: { lat: 22.75, lon: 121.16, int: 2 },
+                卑南: { lat: 22.82, lon: 121.08, int: 2 },
+                池上: { lat: 23.1, lon: 121.22, int: 2 },
+                綠島: { lat: 22.67, lon: 121.47, int: 2 },
+                成功: { lat: 23.1, lon: 121.37, int: 1 },
+                海端: { lat: 23.15, lon: 121.21, int: 1 },
+                太麻里: { lat: 22.6, lon: 120.96, int: 1 },
+                蘭嶼: { lat: 22.04, lon: 121.56, int: 1 },
+              },
+            },
+            花蓮縣: {
+              int: 1,
+              town: { 富里: { lat: 23.2, lon: 121.29, int: 1 } },
+            },
+          },
+        },
+      ],
     },
   }}
 />
