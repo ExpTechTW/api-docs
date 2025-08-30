@@ -3,6 +3,7 @@ sidebar_position: 1
 ---
 
 import ApiEndpoint from "@site/src/components/ApiEndpoint";
+import ApiFieldsTable from "@site/src/components/ApiFieldsTable";
 
 # 地震報告
 
@@ -13,6 +14,8 @@ import ApiEndpoint from "@site/src/components/ApiEndpoint";
 不推薦使用，建議遷移至 v2。
 
 :::
+
+### 請求
 
 <ApiEndpoint
   method="GET"
@@ -60,4 +63,56 @@ import ApiEndpoint from "@site/src/components/ApiEndpoint";
       ],
     },
   }}
+/>
+
+### 說明
+
+<ApiFieldsTable
+  fields={[
+    {
+      name: "id",
+      type: "String",
+      description: "事件編號",
+    },
+    {
+      name: "no",
+      type: "Integer",
+      description: "地震編號，小區域地震尾數為 000",
+    },
+    {
+      name: "lat",
+      type: "Float",
+      description: "震央緯度座標，到小數點第 2 位",
+    },
+    {
+      name: "lon",
+      type: "Float",
+      description: "震央經度座標，到小數點第 2 位",
+    },
+    {
+      name: "depth",
+      type: "Float",
+      description: "震源深度，單位為公里",
+    },
+    {
+      name: "loc",
+      type: "String",
+      description: "震央位置的文字描述",
+    },
+    {
+      name: "mag",
+      type: "Integer",
+      description: "地震規模 (芮氏規模)",
+    },
+    {
+      name: "time",
+      type: "Long",
+      description: "發震時間的 Unix timestamp (毫秒)",
+    },
+    {
+      name: "list",
+      type: "Object",
+      description: "各縣市與鄉鎮市區的震度資料，包含震度與座標資訊",
+    },
+  ]}
 />
