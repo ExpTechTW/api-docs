@@ -2,4 +2,77 @@
 sidebar_position: 2
 ---
 
+import ApiFieldsTable from "@site/src/components/ApiFieldsTable";
+
 # RTS
+
+## v1
+
+### 權限
+
+- `websocket.trem.rts.v1`
+
+### 資料
+
+```json
+{
+  "type": "data",
+  "topic": "websocket.trem.rts.v1",
+  "payload": {
+    "station": {
+      "1480496": { "pga": 0.41, "pgv": 0.02, "i": -2.9, "I": -2.8 }, // 參閱下方 station[id]
+      "1936924": { "pga": 2.66, "pgv": 0.54, "i": -3, "I": -3 },
+      "2012144": { "pga": 3.96, "pgv": 0.59, "i": -2.7, "I": 1.5, "alert": 1 }
+      // . . . 省略
+    },
+    "box": { "1": 2, "3": 3, "4": 3, "8": 2, "18": 0, "23": 0 }, // 網格區域內的震度 (震度階 0 ~ 9 對應 0 ~ 7 級)
+    "int": [
+      { "code": 335, "i": 3 }, // 鄉鎮震度 (震度階 0 ~ 9 對應 0 ~ 7 級)
+      { "code": 231, "i": 3 },
+      { "code": 241, "i": 2 }
+    ],
+    "time": 1756300287001 // 資料時間
+  },
+  "time": 1724935200000 // 發送時間
+}
+```
+
+### 說明
+
+#### `station[id]`
+
+<ApiFieldsTable
+  fields={[
+    {
+      name: "pga",
+      type: "Float",
+      description: "地動加速度",
+    },
+    {
+      name: "pgv",
+      type: "Float",
+      description: "地動速度",
+    },
+    {
+      name: "i",
+      type: "Float",
+      description: "即時震度 (計測震度)",
+    },
+    {
+      name: "I",
+      type: "Float",
+      description: "衰減震度 (計測震度)",
+    },
+    {
+      name: "alert",
+      type: "Int?",
+      description: "1 表示該測站觸發",
+    },
+  ]}
+/>
+
+:::warning
+
+`計測震度` 不等於 `震度階`，請勿混淆。
+
+:::
