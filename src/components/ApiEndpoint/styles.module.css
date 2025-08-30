@@ -566,6 +566,11 @@
   font-weight: 700;
 }
 
+.codeBlock :global(.json-comment) {
+  color: #6a9955;
+  font-style: italic;
+}
+
 /* Light mode JSON highlighting */
 [data-theme='light'] .codeBlock {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
@@ -601,6 +606,11 @@
 [data-theme='light'] .codeBlock :global(.json-bracket) {
   color: #d73a49;
   font-weight: 700;
+}
+
+[data-theme='light'] .codeBlock :global(.json-comment) {
+  color: #6a737d;
+  font-style: italic;
 }
 
 @media (max-width: 768px) {

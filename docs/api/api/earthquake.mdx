@@ -15,8 +15,6 @@ import ApiFieldsTable from "@site/src/components/ApiFieldsTable";
 
 :::
 
-### 請求
-
 <ApiEndpoint
   method="GET"
   baseUrls={[
@@ -28,91 +26,41 @@ import ApiFieldsTable from "@site/src/components/ApiFieldsTable";
   responses={{
     "200": {
       description: "成功",
-      data: [
-        {
-          id: "CWA-EQ114000-2025-0829-100546",
-          no: 114000,
-          lat: 22.86,
-          lon: 121.28,
-          depth: 16.9,
-          loc: "臺東縣政府東北方  17.5  公里 (位於臺東縣近海)",
-          mag: 4,
-          time: 1756433146000,
-          list: {
-            臺東縣: {
-              int: 2,
-              town: {
-                東河: { lat: 22.97, lon: 121.3, int: 2 },
-                鹿野: { lat: 22.91, lon: 121.13, int: 2 },
-                臺東市: { lat: 22.75, lon: 121.16, int: 2 },
-                卑南: { lat: 22.82, lon: 121.08, int: 2 },
-                池上: { lat: 23.1, lon: 121.22, int: 2 },
-                綠島: { lat: 22.67, lon: 121.47, int: 2 },
-                成功: { lat: 23.1, lon: 121.37, int: 1 },
-                海端: { lat: 23.15, lon: 121.21, int: 1 },
-                太麻里: { lat: 22.6, lon: 120.96, int: 1 },
-                蘭嶼: { lat: 22.04, lon: 121.56, int: 1 },
-              },
-            },
-            花蓮縣: {
-              int: 1,
-              town: { 富里: { lat: 23.2, lon: 121.29, int: 1 } },
-            },
-          },
-        },
-      ],
+      data: `[
+  {
+    "id": "CWA-EQ114000-2025-0829-100546",    // 事件編號
+    "no": 114000,                             // 地震編號
+    "lat": 22.86,                             // 震央緯度
+    "lon": 121.28,                            // 震央經度
+    "depth": 16.9,                            // 震源深度（公里）
+    "loc": "臺東縣政府東北方 17.5 公里 (位於臺東縣近海)",  // 位置描述
+    "mag": 4,                                 // 地震規模
+    "time": 1756433146000,                    // 發震時間（毫秒）
+    "list": {                                 // 各地震度資料
+      "臺東縣": {
+        "int": 2,                             // 縣市最大震度 1 ~ 9 (對應 1 ~ 7 級)
+        "town": {                             // 各鄉鎮震度
+          "東河": { "lat": 22.97, "lon": 121.3, "int": 2 },
+          "鹿野": { "lat": 22.91, "lon": 121.13, "int": 2 },
+          "臺東市": { "lat": 22.75, "lon": 121.16, "int": 2 },
+          "卑南": { "lat": 22.82, "lon": 121.08, "int": 2 },
+          "池上": { "lat": 23.1, "lon": 121.22, "int": 2 },
+          "綠島": { "lat": 22.67, "lon": 121.47, "int": 2 },
+          "成功": { "lat": 23.1, "lon": 121.37, "int": 1 },
+          "海端": { "lat": 23.15, "lon": 121.21, "int": 1 },
+          "太麻里": { "lat": 22.6, "lon": 120.96, "int": 1 },
+          "蘭嶼": { "lat": 22.04, "lon": 121.56, "int": 1 }
+        }
+      },
+      "花蓮縣": {
+        "int": 1,
+        "town": {
+          "富里": { "lat": 23.2, "lon": 121.29, "int": 1 }
+        }
+      }
+    }
+  }
+]`,
     },
   }}
-/>
-
-### 說明
-
-<ApiFieldsTable
-  fields={[
-    {
-      name: "id",
-      type: "String",
-      description: "事件編號",
-    },
-    {
-      name: "no",
-      type: "Integer",
-      description: "地震編號，小區域地震尾數為 000",
-    },
-    {
-      name: "lat",
-      type: "Float",
-      description: "震央緯度座標，到小數點第 2 位",
-    },
-    {
-      name: "lon",
-      type: "Float",
-      description: "震央經度座標，到小數點第 2 位",
-    },
-    {
-      name: "depth",
-      type: "Float",
-      description: "震源深度，單位為公里",
-    },
-    {
-      name: "loc",
-      type: "String",
-      description: "震央位置的文字描述",
-    },
-    {
-      name: "mag",
-      type: "Integer",
-      description: "地震規模 (芮氏規模)",
-    },
-    {
-      name: "time",
-      type: "Long",
-      description: "發震時間的 Unix timestamp (毫秒)",
-    },
-    {
-      name: "list",
-      type: "Object",
-      description: "各縣市與鄉鎮市區的震度資料，包含震度與座標資訊",
-    },
-  ]}
 />

@@ -3,6 +3,7 @@ import styles from "./styles.module.css";
 
 const highlightJSON = (jsonString: string) => {
   return jsonString
+    .replace(/(\/\/.*$)/gm, '<span class="json-comment">$1</span>')
     .replace(/("[\w\s]*")\s*:/g, '<span class="json-key">$1</span>:')
     .replace(/:\s*(".*?")/g, ': <span class="json-string">$1</span>')
     .replace(/:\s*(\d+)/g, ': <span class="json-number">$1</span>')
@@ -216,7 +217,11 @@ export default function ApiEndpoint({
               <pre className={styles.codeBlock}>
                 <code 
                   dangerouslySetInnerHTML={{ 
-                    __html: highlightJSON(JSON.stringify(responses[selectedStatus]?.data, null, 2))
+                    __html: highlightJSON(
+                      typeof responses[selectedStatus]?.data === 'string' 
+                        ? responses[selectedStatus]?.data 
+                        : JSON.stringify(responses[selectedStatus]?.data, null, 2)
+                    )
                   }}
                 />
               </pre>

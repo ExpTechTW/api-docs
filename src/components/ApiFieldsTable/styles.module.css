@@ -56,6 +56,8 @@
 .table td:nth-child(3) {
   width: auto !important;
   min-width: 0;
+  white-space: normal;
+  word-wrap: break-word;
 }
 
 [data-theme='dark'] .table th {
@@ -101,6 +103,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--ifm-color-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .required {
