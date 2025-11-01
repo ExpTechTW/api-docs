@@ -56,6 +56,12 @@ const config: Config = {
           position: "left",
           label: "API",
         },
+        {
+          type: "docSidebar",
+          sidebarId: "productSidebar",
+          position: "left",
+          label: "產品",
+        },
         // {
         //   type: "localeDropdown",
         //   position: "right",
@@ -76,6 +82,10 @@ const config: Config = {
             {
               label: "API",
               to: "/docs/api/start/",
+            },
+            {
+              label: "產品",
+              to: "/docs/product/start/",
             },
           ],
         },
