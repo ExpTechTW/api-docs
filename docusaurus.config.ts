@@ -18,7 +18,7 @@ const config: Config = {
 
   i18n: {
     defaultLocale: "zh-Hant",
-    locales: ["zh-Hant", "en"],
+    locales: ["zh-Hant", "en", "ja"],
   },
 
   presets: [
@@ -29,6 +29,8 @@ const config: Config = {
           sidebarPath: "./sidebars.ts",
           editUrl: "https://github.com/ExpTechTW/api-docs/tree/main",
           editLocalizedFiles: true,
+          showLastUpdateAuthor: true,
+          showLastUpdateTime: true,
         },
         blog: {
           showReadingTime: true,
@@ -62,10 +64,10 @@ const config: Config = {
           position: "left",
           label: "產品",
         },
-        // {
-        //   type: "localeDropdown",
-        //   position: "right",
-        // },
+        {
+          type: "localeDropdown",
+          position: "right",
+        },
         {
           href: "https://github.com/ExpTechTW/api-Docs",
           label: "GitHub",

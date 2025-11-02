@@ -1,0 +1,133 @@
+---
+sidebar_position: 3
+---
+
+# ES-Net
+
+## Physical Specifications
+
+| Parameter      | Value      | Unit |
+| :------------- | :--------- | :--- |
+| Length         | `70`       | `mm` |
+| Width          | `35`       | `mm` |
+| Height         | `24`       | `mm` |
+| Weight         | `36.8`     | `g`  |
+| Protection     | `IP10`     | -    |
+| Operating Temp | `-20` ~ `65` | `°C` |
+
+:::danger Temperature Usage Warning
+
+**Enclosure Material Limitation**
+
+- Electronic components have been tested to operate normally at `65°C`
+- Due to **PLA material** enclosure, **recommended operating temperature limit is `60°C`**
+- Prolonged exposure above `60°C` may cause PLA enclosure **deformation**
+
+:::
+
+## Electrical Specifications
+
+| Parameter   | Value | Unit |
+| :---------- | :---- | :--- |
+| Min Voltage | `4.5` | `V`  |
+| Max Voltage | `5.2` | `V`  |
+
+### Power Consumption
+
+| Mode          | Voltage | Power | Unit |
+| :------------ | :------ | :---- | :--- |
+| Online Mode   | `4.5V`  | `0.4` | `W`  |
+| Online Mode   | `5.2V`  | `0.6` | `W`  |
+| Offline Mode  | `4.5V`  | `0.7` | `W`  |
+| Offline Mode  | `5.2V`  | `0.8` | `W`  |
+
+### NTP Time Synchronization
+
+| Parameter        | Value    |
+| :--------------- | :------- |
+| Sync Period      | `120s`   |
+| Time Accuracy    | `50ppm`  |
+| Time Error       | `±10ms`  |
+
+### Mode Description
+
+#### Online Mode
+
+:::tip Recommended Mode
+
+- NTP time synchronization enabled, typically provides error of `±10ms`
+- Time accuracy: `50ppm`
+- Sync period: Auto-sync every `120s`
+
+:::
+
+#### Offline Mode
+
+:::warning
+
+- NTP time synchronization disabled
+- Data transmission via `UART`
+- **Waveform timing is less accurate**
+
+:::
+
+## Sensor Specifications
+
+### Basic Parameters
+
+| Parameter         | Value               |
+| :---------------- | :------------------ |
+| Sensor Type       | `MEMS Seismometer`  |
+| Sensor Axes       | `Three-axis (XYZ)` |
+| Frequency Range   | `DC-25Hz`           |
+| Sampling Rate     | `50 SPS`            |
+| Data Resolution   | `16 bit`            |
+| Noise Density     | `60 µg/√Hz`         |
+| Full Scale        | `2G` (approx. 1961 gal) |
+
+### Filter
+
+Built-in filter includes time-domain and frequency-domain filtering:
+
+:::info Time-Domain Filter (BPF)
+
+- **HPF**: `11-stage IIR`, approximately `1Hz` cutoff frequency
+- **LPF**: `11-stage IIR`, approximately `10Hz` cutoff frequency
+
+:::
+
+:::info Frequency-Domain Filter
+
+- Attenuation below `0.5Hz`
+- Attenuation above `10Hz`
+- Periodic effect compensation: `√(1/f)`
+
+:::
+
+## Communication Specifications
+
+### Wired Communication
+
+| Parameter     | Value                      |
+| :------------ | :------------------------- |
+| Interface     | `USB Type-C Serial Port (UART)` |
+| Baud Rate     | `115200 bps`               |
+| Data Format   | `Binary`                   |
+
+:::info Output Data
+
+- `Three-axis acceleration (gal)`
+- `Three-axis acceleration-filtered (gal)`
+- `JMA Measured Intensity`
+- `PGA(a)`
+
+:::
+
+### Wireless Communication (Wi-Fi)
+
+| Parameter       | Value           |
+| :------------- | :-------------- |
+| Frequency Band | `2.4 GHz`       |
+| Standard       | `802.11 b/g/n`  |
+| Antenna Output | `20 dBm` (max)  |
+

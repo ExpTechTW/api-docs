@@ -1,0 +1,47 @@
+---
+sidebar_position: 4
+---
+
+# QuakeWatch-Pro
+
+## 概要
+
+QuakeWatch-Pro は地震計 (ES シリーズ) 専用に設計された配套ソフトウェアで、USB Type-C シリアルポート (UART) 経由で地震計に接続し、地震波形データを表示します。
+
+## 環境
+
+- Python `3.11.13`
+
+## ダウンロード
+
+- [GitHub](https://github.com/ExpTechTW/QuakeWatch-Pro)
+
+## 準備
+
+- QuakeWatch-Pro のディレクトリに移動
+
+```bash
+cd ./Documents/GitHub/QuakeWatch-Pro
+```
+
+:::tip
+
+実際の状況に応じてパスを修正してください。
+
+:::
+
+## 依存関係のインストール
+
+```bash
+pip install -r requirements.txt
+```
+
+:::warning
+
+`python3 -m venv venv` で仮想環境を作成し、`source venv/bin/activate` で仮想環境を使用することをお勧めします。
+
+:::
+
+## 実行
+
+- `python main.py` を実行

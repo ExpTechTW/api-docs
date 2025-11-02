@@ -1,0 +1,30 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.apiSidebar.category.關於": {
+    "message": "關於",
+    "description": "The label for category 關於 in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.驗證": {
+    "message": "驗證",
+    "description": "The label for category 驗證 in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.API": {
+    "message": "API",
+    "description": "The label for category API in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.Socket": {
+    "message": "Socket",
+    "description": "The label for category Socket in sidebar apiSidebar"
+  },
+  "sidebar.apiSidebar.category.更多": {
+    "message": "更多",
+    "description": "The label for category 更多 in sidebar apiSidebar"
+  },
+  "sidebar.productSidebar.category.地震儀 (ES 系列)": {
+    "message": "地震儀 (ES 系列)",
+    "description": "The label for category 地震儀 (ES 系列) in sidebar productSidebar"
+  }
+}
