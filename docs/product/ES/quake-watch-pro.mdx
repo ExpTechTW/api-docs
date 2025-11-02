@@ -10,7 +10,8 @@ QuakeWatch-Pro 是一款專為地震儀 (ES 系列) 設計的配套軟體，可�
 
 ## 環境
 
-- Python `3.11.13`
+- [**Python 版本要求：** `3.10` ≤ Python ≤ `3.12`](https://www.python.org/downloads/)
+- [**推薦版本：** Python `3.10`、`3.11` 或 `3.12`](https://www.python.org/downloads/)
 
 ## 下載
 
@@ -18,7 +19,7 @@ QuakeWatch-Pro 是一款專為地震儀 (ES 系列) 設計的配套軟體，可�
 
 ## 準備
 
-- cd 到 QuakeWatch-Pro 的目錄
+1. 切換到 QuakeWatch-Pro 的目錄
 
 ```bash
 cd ./Documents/GitHub/QuakeWatch-Pro
@@ -30,18 +31,102 @@ cd ./Documents/GitHub/QuakeWatch-Pro
 
 :::
 
+2. （建議）建立虛擬環境
+
+:::tip 建議使用虛擬環境
+
+**macOS:**
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
+**Windows:**
+
+```bash
+python -m venv venv
+.\venv\Scripts\activate
+```
+
+:::
+
 ## 安裝依賴
 
 ```bash
 pip install -r requirements.txt
 ```
 
-:::warning
-
-建議使用 `python3 -m venv venv` 建立虛擬環境，並使用 `source venv/bin/activate` 使用虛擬環境。
-
-:::
-
 ## 執行
 
-- 執行 `python main.py`
+1. 先執行 `data_collector.py` 收集資料
+
+```bash
+python data_collector.py
+```
+
+**輸出範例：**
+
+執行後會顯示可用的串列埠列表：
+
+```bash
+(venv) C:\Users\kai\Documents\GitHub\QuakeWatch-Pro>python data_collector.py
+QuakeWatch - ES-Net Serial Data Collector
+============================================================
+✓ 數據庫已初始化: earthquake_data.db
+
+可用串列埠:
+[0] COM4 - Silicon Labs CP210x USB to UART Bridge (COM4)
+[1] COM1 - 通訊連接埠 (COM1)
+
+請選擇 [0-1] 或 q 退出:
+```
+
+選擇要收集的串列埠，輸入編號後按下 `Enter` 鍵。
+
+成功連接後會看到以下輸出：
+
+```bash
+請選擇 [0-1] 或 q 退出: 0
+
+✓ 已連接: COM4 @ 115200 baud
+[收集線程] 已啟動
+
+開始收集數據... (按 Ctrl+C 停止)
+[統計 05:10:06] 原始:0(0.0/s) | 濾波:0(0.0/s) | 震度:0(0.0/s) | 錯誤:0
+```
+
+這代表資料收集正在正常進行中。
+
+
+2. 執行 `main.py` 顯示波形圖
+
+```bash
+python main.py
+```
+
+**輸出範例：**
+
+成功啟動後會看到以下輸出：
+
+```bash
+(venv) C:\Users\kai\Documents\GitHub\QuakeWatch-Pro>python main.py
+QuakeWatch - ES-Net Data Visualization
+============================================================
+
+✓ 數據庫文件: earthquake_data.db
+
+開始接收資料...
+
+[解析線程] 已啟動 (時間窗口: 60 秒)
+```
+
+這代表波形圖顯示程式正在正常運行。
+
+:::warning 重要提醒
+
+- 請先執行 `data_collector.py` 收集資料，再執行 `main.py` 顯示波形圖
+- **不要**先直接執行 `main.py`
+- **不要**關閉 `data_collector.py` 只執行 `main.py`，否則會導致資料收集不完全
+
+:::
