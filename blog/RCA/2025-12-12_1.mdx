@@ -15,7 +15,7 @@ import SeverityBadge from "@site/src/components/SeverityBadge";
 **發生時間：** 2025/12/12 04:24:28 UTC+8  
 **觸發事件：** 地震後  
 **問題描述：** TREM Lite 出現偵測重複觸發的問題  
-**根本原因：** 因資料不一致導致系統異常
+**根本原因：** upstream 資料不一致污染 cache，導致系統異常
 
 <div
   style={{
@@ -58,13 +58,15 @@ upstream core_servers {
 
 ### 問題說明
 
-`hash $remote_addr consistent;` 會根據用戶端的 IP 位址進行一致性雜湊（Consistent Hashing），將來自同一 IP 的請求分配到特定的 Core Server。
+**問題主因：**
 
-**問題點：**
+當系統從不同的 upstream 取得資料時，會將不一致的資料寫入 cache。
 
-- 當網路不穩定時，用戶端 IP 可能發生變化
-- 導致資料來源在兩個 upstream（`tnn.exptech.dev` 和 `tpe.exptech.dev`）之間來回切換
-- 造成資料不一致，進而引發 TREM Lite 偵測重複觸發的問題
+- 兩個 upstream 伺服器（`tnn.exptech.dev` 和 `tpe.exptech.dev`）的資料不一致
+- 使用一致性雜湊（`hash $remote_addr consistent;`）時，請求可能被分配到不同的 upstream
+- 當系統從不同的 upstream 取得資料時，會將不一致的資料寫入 cache
+- 後續請求讀取到被污染的 cache 資料，導致資料狀態混亂
+- 進而引發 TREM Lite 偵測重複觸發的問題
 
 ## 解決方案
 
@@ -90,7 +92,9 @@ upstream core_servers {
 
    - 僅在主伺服器不可用時才會使用
 
-3. **移除一致性雜湊：** 避免因 IP 變化導致的資料來源切換問題
+3. **移除一致性雜湊：** 避免請求被分配到不同的 upstream 伺服器
+
+4. **單一資料來源：** 使用主備模式確保所有請求都從同一個資料來源取得資料，避免不同 upstream 的資料不一致污染 cache
 
 ## 後續觀察
 
