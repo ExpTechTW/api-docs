@@ -1,0 +1,82 @@
+---
+title: 2025/12/12 TREM Lite 偵測重複觸發問題
+authors: [yuyu1015]
+tags: [yuyu1015, rca]
+---
+
+import SeverityBadge from "@site/src/components/SeverityBadge";
+
+<SeverityBadge level="medium" />
+
+---
+
+## 事件概述
+
+**發生時間：** 2025/12/12 04:24:28 UTC+8  
+**觸發事件：** 地震後  
+**問題描述：** TREM Lite 出現偵測重複觸發的問題  
+**根本原因：** 因資料不一致導致系統異常
+
+<iframe
+  width="560"
+  height="315"
+  src="https://www.youtube.com/embed/UI9hKzP17LE"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
+
+## 根本原因分析
+
+### 問題根源
+
+Balance Server 上的 Nginx 使用了以下負載平衡設定：
+
+```bash
+upstream core_servers {
+    server tnn.exptech.dev:80;
+    server tpe.exptech.dev:80;
+
+    hash $remote_addr consistent;
+}
+```
+
+### 問題說明
+
+`hash $remote_addr consistent;` 會根據用戶端的 IP 位址進行一致性雜湊（Consistent Hashing），將來自同一 IP 的請求分配到特定的 Core Server。
+
+**問題點：**
+
+- 當網路不穩定時，用戶端 IP 可能發生變化
+- 導致資料來源在兩個 upstream（`tnn.exptech.dev` 和 `tpe.exptech.dev`）之間來回切換
+- 造成資料不一致，進而引發 TREM Lite 偵測重複觸發的問題
+
+## 解決方案
+
+### 修改後的設定
+
+將 Nginx upstream 設定改為以下配置：
+
+```bash
+upstream core_servers {
+    server tnn.exptech.dev:80 max_fails=1 fail_timeout=10s;
+    server tpe.exptech.dev:80 backup;
+}
+```
+
+### 改進說明
+
+1. **主伺服器設定：** `tnn.exptech.dev` 設為主伺服器，並設定故障檢測參數
+
+   - `max_fails=1`：允許最多 1 次失敗
+   - `fail_timeout=10s`：故障後 10 秒內不再嘗試該伺服器
+
+2. **備援伺服器設定：** `tpe.exptech.dev` 設為備援伺服器（backup）
+
+   - 僅在主伺服器不可用時才會使用
+
+3. **移除一致性雜湊：** 避免因 IP 變化導致的資料來源切換問題
+
+## 後續觀察
+
+經觀察後，故障應該已經排除。建議持續監控系統狀態，確保問題不再發生。
