@@ -6,6 +6,7 @@ tags: [yuyu1015, rca]
 
 import SeverityBadge from "@site/src/components/SeverityBadge";
 import StatusBadge from "@site/src/components/StatusBadge";
+import ImageLightbox from "@site/src/components/ImageLightbox";
 
 <SeverityBadge level="medium" />
 <StatusBadge status="investigating" />
@@ -14,16 +15,37 @@ import StatusBadge from "@site/src/components/StatusBadge";
 
 ## 事件概述
 
-**發生時間：** 2025/12/13 03:33 左右 UTC+8  
-**觸發條件：** 維護過程中  
-**問題描述：** TREM Lite 地震報告重複推送的問題
-**根本原因：** API 資料雜湊值不一致，導致地震報告重複推送
+- **發生時間：** 2025/12/13 03:33 (UTC+8) 左右
+- **觸發條件：** 維護過程中
+- **問題描述：** TREM Lite 地震報告重複推送的問題
+- **根本原因：** API 資料雜湊值不一致，導致地震報告重複推送
+
+## 時間軸
+
+| 時間 (UTC+8)     | 事件                                 |
+| ---------------- | ------------------------------------ |
+| 2025/12/13 03:33 | 問題發生：TREM Lite 地震報告重複推送 |
+| 2025/12/13 03:53 | 確認問題並開始進行修復               |
+| 2025/12/13 03:54 | 執行緊急處理，嘗試緩解問題           |
+| 2025/12/13 03:55 | 觀察到問題已緩解                     |
+
+## 事件經過
+
+在進行 TNN Core Server 的維護作業期間，調整 Nginx 設定時將 report server 容器重啟，隨後發生 TREM Lite 地震報告重複推送的問題。
+問題發生後，立即進行排查，確認問題根源並執行修復，約 22 分鐘後問題得到緩解。
 
 ## 根本原因分析
 
 ### 問題根源
 
-兩個不同來源的 API 資料雜湊值(md5)不一致，導致客戶端判斷為新的地震報告。
+兩個不同來源的 API 伺服器（`api-1.exptech.dev` 和 `api-2.exptech.dev`）對於相同的地震事件，產生的 MD5 雜湊值不一致，導致客戶端判斷為新的地震報告，進而產生重複推送的問題。
+
+**關鍵差異：**
+
+從上述 API 回應資料可以觀察到，相同的地震事件（相同的 `id`）在兩個 API 伺服器上：
+
+- `trem` 時間戳不同（例如：`1765484671592` vs `1765484672700`）
+- 因此計算出的 `md5` 雜湊值也不同（例如：`B00F1BCF25C80D8A4EAA865D1D8EEC33` vs `DA5510C9B54576B883E04F4DD7178E9C`）
 
 `api-1.exptech.dev`
 
@@ -163,10 +185,33 @@ import StatusBadge from "@site/src/components/StatusBadge";
 
 **問題主因：**
 
-- ![image.png](../../static/img/RCA/2025-12-13_1/image.png)
+可以從下方圖片發現，兩邊 (`TNN`、`TPE`) 的 **ID** 不一致。
+
+<ImageLightbox src="/img/RCA/2025-12-13_1/image.png" alt="問題說明圖" />
+
+伺服器上的 **MD5 雜湊值** 計算方式如下：
+
+```js
+const ans = {
+  ...earthquakeData, // CWA 地震報告
+  trem, // TREM EQ ID
+  md5: calculateMD5Hash(
+    JSON.stringify({
+      ...earthquakeData,
+      trem,
+    })
+  ).toLocaleUpperCase(), // MD5 雜湊值
+};
+```
+
+**TREM EQ ID** 的取得方式如下：
+
+```sql
+SELECT ID FROM trem_report WHERE Cwa_id = ? LIMIT 1;
+```
+
+綜上所述，**MD5 雜湊值** 的不一致最終導致問題的發生。
 
 ## 解決方案
-
-### 改進說明
 
 ## 後續觀察

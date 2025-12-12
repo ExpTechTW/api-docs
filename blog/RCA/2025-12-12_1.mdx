@@ -5,17 +5,19 @@ tags: [yuyu1015, rca]
 ---
 
 import SeverityBadge from "@site/src/components/SeverityBadge";
+import StatusBadge from "@site/src/components/StatusBadge";
 
 <SeverityBadge level="medium" />
+<StatusBadge status="resolved" />
 
 ---
 
 ## 事件概述
 
-**發生時間：** 2025/12/12 04:24:28 UTC+8  
-**觸發條件：** 地震後  
-**問題描述：** TREM Lite 出現偵測重複觸發的問題  
-**根本原因：** upstream 資料不一致污染 cache，導致系統異常
+- **發生時間：** 2025/12/12 04:24:28 UTC+8
+- **觸發條件：** 地震後
+- **問題描述：** TREM Lite 出現偵測重複觸發的問題
+- **根本原因：** upstream 資料不一致污染 cache，導致系統異常
 
 <div
   style={{
