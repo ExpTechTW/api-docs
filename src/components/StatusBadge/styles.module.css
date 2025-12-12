@@ -1,0 +1,126 @@
+/* 基礎樣式 - 毛玻璃效果 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  background: rgba(30, 30, 30, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: #1a1a1a;
+  text-shadow: none;
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 子元素樣式 */
+.indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 500;
+  opacity: 0.75;
+}
+
+.divider {
+  width: 1px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="light"] .divider {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Investigating - 調查中 */
+.investigating {
+  border-color: rgba(251, 191, 36, 0.5);
+  background: rgba(251, 191, 36, 0.08);
+  animation: glow-investigating 2s ease-in-out infinite;
+}
+
+[data-theme="light"] .investigating {
+  background: rgba(251, 191, 36, 0.06);
+}
+
+.investigating .indicator {
+  background: #fbbf24;
+  box-shadow: 0 0 8px #fbbf24;
+  animation: pulse-investigating 2s ease-in-out infinite;
+}
+
+.investigating .label {
+  color: #fcd34d;
+}
+
+[data-theme="light"] .investigating .label {
+  color: #d97706;
+}
+
+@keyframes glow-investigating {
+  0%,
+  100% {
+    box-shadow: 0 0 6px rgba(251, 191, 36, 0.3),
+      0 0 12px rgba(251, 191, 36, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(251, 191, 36, 0.6),
+      0 0 24px rgba(251, 191, 36, 0.4), 0 0 36px rgba(251, 191, 36, 0.2);
+  }
+}
+
+@keyframes pulse-investigating {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+/* Resolved - 已結案 */
+.resolved {
+  border-color: rgba(34, 197, 94, 0.5);
+  background: rgba(34, 197, 94, 0.08);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.3);
+}
+
+[data-theme="light"] .resolved {
+  background: rgba(34, 197, 94, 0.06);
+}
+
+.resolved .indicator {
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+}
+
+.resolved .label {
+  color: #4ade80;
+}
+
+[data-theme="light"] .resolved .label {
+  color: #16a34a;
+}
