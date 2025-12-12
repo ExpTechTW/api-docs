@@ -9,7 +9,7 @@ import StatusBadge from "@site/src/components/StatusBadge";
 import ImageLightbox from "@site/src/components/ImageLightbox";
 
 <SeverityBadge level="medium" />
-<StatusBadge status="investigating" />
+<StatusBadge status="resolved" />
 
 ---
 
@@ -18,7 +18,7 @@ import ImageLightbox from "@site/src/components/ImageLightbox";
 - **發生時間：** 2025/12/13 03:33 (UTC+8) 左右
 - **觸發條件：** 維護過程中
 - **問題描述：** TREM Lite 地震報告重複推送的問題
-- **根本原因：** API 資料雜湊值不一致，導致地震報告重複推送
+- **根本原因：** 快取鍵衝突
 
 ## 時間軸
 
@@ -38,180 +38,91 @@ import ImageLightbox from "@site/src/components/ImageLightbox";
 
 ### 問題根源
 
-兩個不同來源的 API 伺服器（`api-1.exptech.dev` 和 `api-2.exptech.dev`）對於相同的地震事件，產生的 MD5 雜湊值不一致，導致客戶端判斷為新的地震報告，進而產生重複推送的問題。
-
-**關鍵差異：**
-
-從上述 API 回應資料可以觀察到，相同的地震事件（相同的 `id`）在兩個 API 伺服器上：
-
-- `trem` 時間戳不同（例如：`1765484671592` vs `1765484672700`）
-- 因此計算出的 `md5` 雜湊值也不同（例如：`B00F1BCF25C80D8A4EAA865D1D8EEC33` vs `DA5510C9B54576B883E04F4DD7178E9C`）
-
-`api-1.exptech.dev`
-
-```json
-[
-  {
-    "id": "114149-2025-1212-042428",
-    "lat": 23.19,
-    "lon": 120.47,
-    "depth": 8.9,
-    "loc": "臺南市政府東北方  36.4  公里 (位於臺南市楠西區)",
-    "mag": 4,
-    "time": 1765484668000,
-    "int": 4,
-    "trem": 1765484671592,
-    "md5": "B00F1BCF25C80D8A4EAA865D1D8EEC33"
-  },
-  {
-    "id": "114148-2025-1211-231940",
-    "lat": 23.18,
-    "lon": 120.66,
-    "depth": 8.2,
-    "loc": "高雄市政府北北東方  71.5  公里 (位於高雄市甲仙區)",
-    "mag": 4.7,
-    "time": 1765466380000,
-    "int": 4,
-    "trem": 1765466391158,
-    "md5": "F2B6AE32A6E4D8A459ECEDFDE19180E6"
-  },
-  {
-    "id": "114000-2025-1211-225941",
-    "lat": 23.17,
-    "lon": 120.67,
-    "depth": 8,
-    "loc": "高雄市政府北北東方  71.2  公里 (位於高雄市甲仙區)",
-    "mag": 3.5,
-    "time": 1765465181000,
-    "int": 2,
-    "trem": 1765465199063,
-    "md5": "685F5C6EC26FBF1F9159906486A5C127"
-  },
-  {
-    "id": "114147-2025-1211-224902",
-    "lat": 23.18,
-    "lon": 120.66,
-    "depth": 8,
-    "loc": "高雄市政府北北東方  71.1  公里 (位於高雄市甲仙區)",
-    "mag": 4.7,
-    "time": 1765464542000,
-    "int": 4,
-    "trem": 1765464552546,
-    "md5": "F34095B26D0895AA0995F3028B76DE02"
-  },
-  {
-    "id": "114000-2025-1211-124902",
-    "lat": 24.62,
-    "lon": 121.75,
-    "depth": 45.4,
-    "loc": "宜蘭縣政府南方  12.3  公里 (位於宜蘭縣冬山鄉)",
-    "mag": 4,
-    "time": 1765428542000,
-    "int": 1,
-    "trem": 1765428550547,
-    "md5": "F1CC648A41D465CA2F60264ACCABC7A3"
-  }
-]
-```
-
-`api-2.exptech.dev`
-
-```json
-[
-  {
-    "id": "114149-2025-1212-042428",
-    "lat": 23.19,
-    "lon": 120.47,
-    "depth": 8.9,
-    "loc": "臺南市政府東北方  36.4  公里 (位於臺南市楠西區)",
-    "mag": 4,
-    "time": 1765484668000,
-    "int": 4,
-    "trem": 1765484672700,
-    "md5": "DA5510C9B54576B883E04F4DD7178E9C"
-  },
-  {
-    "id": "114148-2025-1211-231940",
-    "lat": 23.18,
-    "lon": 120.66,
-    "depth": 8.2,
-    "loc": "高雄市政府北北東方  71.5  公里 (位於高雄市甲仙區)",
-    "mag": 4.7,
-    "time": 1765466380000,
-    "int": 4,
-    "trem": 1765466391208,
-    "md5": "D207D655C1A9E720E7BBC33B1F4CCD33"
-  },
-  {
-    "id": "114000-2025-1211-225941",
-    "lat": 23.17,
-    "lon": 120.67,
-    "depth": 8,
-    "loc": "高雄市政府北北東方  71.2  公里 (位於高雄市甲仙區)",
-    "mag": 3.5,
-    "time": 1765465181000,
-    "int": 2,
-    "trem": 1765465199151,
-    "md5": "25A440BC96AC17E401AEFFFED42CD06C"
-  },
-  {
-    "id": "114147-2025-1211-224902",
-    "lat": 23.18,
-    "lon": 120.66,
-    "depth": 8,
-    "loc": "高雄市政府北北東方  71.1  公里 (位於高雄市甲仙區)",
-    "mag": 4.7,
-    "time": 1765464542000,
-    "int": 4,
-    "trem": 1765464552550,
-    "md5": "24C4744A01521C9540CE2D5FD209AF07"
-  },
-  {
-    "id": "114000-2025-1211-124902",
-    "lat": 24.62,
-    "lon": 121.75,
-    "depth": 45.4,
-    "loc": "宜蘭縣政府南方  12.3  公里 (位於宜蘭縣冬山鄉)",
-    "mag": 4,
-    "time": 1765428542000,
-    "int": 1,
-    "trem": 0,
-    "md5": "6C759AE5E57359B06662C6B0C31B68B1"
-  }
-]
-```
+快取鍵設定不當，導致不同參數的請求共用相同的快取結果，造成 API 回應不符合預期。
 
 ### 問題說明
 
 **問題主因：**
 
-可以從下方圖片發現，兩邊 (`TNN`、`TPE`) 的 **ID** 不一致。
+當系統從不同的 upstream 取得資料時，會將不一致的資料寫入 cache。
 
-<ImageLightbox src="/img/RCA/2025-12-13_1/image.png" alt="問題說明圖" />
+故障時 Nginx 設定如下：
 
-伺服器上的 **MD5 雜湊值** 計算方式如下：
-
-```js
-const ans = {
-  ...earthquakeData, // CWA 地震報告
-  trem, // TREM EQ ID
-  md5: calculateMD5Hash(
-    JSON.stringify({
-      ...earthquakeData,
-      trem,
-    })
-  ).toLocaleUpperCase(), // MD5 雜湊值
-};
+```bash
+location ~ ^/api/(v1|v2)/eq/report {
+  set $cache_key "$uri|$arg_limit|$arg_page|$arg_minIntensity|$arg_maxIntensity|$arg_minMagnitude|$arg_maxMagnitude|$arg_minDepth|$arg_maxDepth";
+  proxy_pass http://report;
+  proxy_cache_key $cache_key;
+  include /etc/nginx/conf.d/cache_1s.inc;
+}
 ```
 
-**TREM EQ ID** 的取得方式如下：
+`cache_1s.inc`
 
-```sql
-SELECT ID FROM trem_report WHERE Cwa_id = ? LIMIT 1;
+```bash
+proxy_cache my_cache;
+proxy_cache_key $url;
+proxy_cache_valid 200 1s;
+proxy_cache_lock on;
+proxy_cache_lock_timeout 1s;
+proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+proxy_cache_background_update on;
 ```
 
-綜上所述，**MD5 雜湊值** 的不一致最終導致問題的發生。
+**問題點：**
+
+1. **快取鍵設定衝突：**
+
+   - 在 `location` 區塊中設定了 `proxy_cache_key $cache_key`（使用自訂的快取鍵）
+   - 但在 `cache_1s.inc` 中又設定了 `proxy_cache_key $url`（使用 URL 作為快取鍵）
+   - 兩個 `proxy_cache_key` 設定衝突，導致快取鍵不一致
+
+2. **回應不符預期：**
+
+   - `cache_1s.inc` 中的 `proxy_cache_key $url;` 會覆蓋 `location` 區塊中的 `proxy_cache_key $cache_key;`
+   - 當請求有查詢參數和沒有查詢參數時，`$url` 可能產生相同的快取鍵
+   - 例如：`/api/v1/eq/report` 和 `/api/v1/eq/report?limit=10` 可能使用相同的快取鍵
+   - 導致不同參數的請求共用相同的快取結果，返回不符合預期的資料
+
+3. **影響：**
+   - 客戶端收到不一致的地震報告資料
+   - 相同的地震事件被重複推送
 
 ## 解決方案
 
+### 修改後的設定
+
+移除 `cache_1s.inc` 中的 `proxy_cache_key $url;` 設定，統一使用 `location` 區塊中定義的 `$cache_key`：
+
+```bash
+location ~ ^/api/(v1|v2)/eq/report {
+  set $cache_key "$uri|$arg_limit|$arg_page|$arg_minIntensity|$arg_maxIntensity|$arg_minMagnitude|$arg_maxMagnitude|$arg_minDepth|$arg_maxDepth";
+  proxy_pass http://report;
+  proxy_cache_key $cache_key;
+  include /etc/nginx/conf.d/cache_1s.inc;
+}
+```
+
+`cache_1s.inc`（修改後）
+
+```bash
+proxy_cache my_cache;
+# 移除 proxy_cache_key $url; 避免與 location 區塊中的設定衝突
+proxy_cache_valid 200 1s;
+proxy_cache_lock on;
+proxy_cache_lock_timeout 1s;
+proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+proxy_cache_background_update on;
+```
+
+### 改進說明
+
+1. **統一快取鍵設定：** 移除 `cache_1s.inc` 中的 `proxy_cache_key $url;`，避免與 `location` 區塊中的自訂快取鍵衝突
+
+2. **確保快取鍵唯一性：** 使用包含所有查詢參數的自訂快取鍵，確保有參數和無參數的請求使用不同的快取鍵
+
+3. **確保回應正確性：** 透過正確的快取鍵設定，確保不同參數的請求使用不同的快取，返回符合預期的資料
+
 ## 後續觀察
+
+經觀察後，問題已得到緩解。
