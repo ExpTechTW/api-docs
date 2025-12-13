@@ -16,7 +16,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
 
       - uses: oven-sh/setup-bun@v2
         with:
@@ -32,11 +32,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-bun-
 
+      - name: Cache Docusaurus build
+        uses: actions/cache@v4
+        with:
+          path: |
+            .docusaurus
+            build
+          key: ${{ runner.os }}-docusaurus-${{ hashFiles('**/package.json', '**/bun.lockb', '**/docusaurus.config.ts', '**/sidebars.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-docusaurus-
+
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
       - name: Build website
         run: bun run build
+        env:
+          NODE_ENV: production
 
       - name: Upload Build Artifact
         uses: actions/upload-pages-artifact@v3
