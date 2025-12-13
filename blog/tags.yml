@@ -7,3 +7,8 @@ rca:
   label: RCA
   permalink: /rca
   description: RCA
+
+analysis:
+  label: Analysis
+  permalink: /analysis
+  description: Analysis
