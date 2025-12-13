@@ -13,8 +13,13 @@ const config: Config = {
   projectName: "api-docs",
 
   onBrokenLinks: "throw",
-  onBrokenMarkdownLinks: "throw",
   onDuplicateRoutes: "throw",
+
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: "throw",
+    },
+  },
 
   i18n: {
     defaultLocale: "zh-Hant",
