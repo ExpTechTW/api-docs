@@ -12,8 +12,7 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc",
-    "add-white-background": "tsx scripts/add-white-background.ts"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@docusaurus/core": "3.9.2",
@@ -30,9 +29,6 @@
     "@docusaurus/module-type-aliases": "3.9.2",
     "@docusaurus/tsconfig": "3.9.2",
     "@docusaurus/types": "3.9.2",
-    "@types/node": "^25.0.1",
-    "sharp": "^0.34.5",
-    "tsx": "^4.21.0",
     "typescript": "~5.9.2"
   },
   "browserslist": {
