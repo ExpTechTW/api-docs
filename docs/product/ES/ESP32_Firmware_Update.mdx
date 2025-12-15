@@ -1,0 +1,135 @@
+---
+sidebar_position: 6
+---
+
+# ESP32 韌體更新
+
+:::tip
+
+本教學需要的環境使用「Python 3.12.10」。
+
+:::
+
+:::tip
+
+請確認電腦已接上網際網路才可以使用。
+
+:::
+
+
+### 下載安裝「Python 3.12.10」
+
+- [Python 官網下載](https://www.python.org/downloads/release/python-31210/)
+
+### 下載「exptech-device-recovery」
+
+#### 第 1 步
+
+請先到 GitHub 下載「exptech-device-recovery」。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/download_exptech-device-recovery.jpg)
+
+#### 第 2 步
+
+下載出來的是壓縮檔，把檔案解壓縮到任一位置。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/exptech-device-recovery-main.jpg)
+
+#### 第 3 步
+
+在資料夾中輸入「cmd」，Enter 鍵。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/folder-cmd.jpg)
+
+#### 第 3 步
+
+在 cmd 中輸入安裝所需的必要依賴。
+
+```bash
+pip install -r requirements.txt
+```
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/pip-requirements.txt.jpg)
+
+#### 第 4 步
+
+在 cmd 中打開 main.py 。
+
+:::tip
+
+請記得先把地震儀用 USB 接到電腦上再輸入以下指令。
+
+:::
+
+:::tip
+
+請確認驅動程式已安裝到電腦上。
+
+:::
+
+```bash
+python main.py
+```
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/open_ESP32_Firmware_main.jpg)
+
+
+#### 第 5 步
+
+請選擇「[1] 使用 firmware.json 中的韌體燒錄（預設）」，直接輸入 1 ，並按下 Enter 鍵。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/firmware-1.jpg)
+
+#### 第 6 步
+
+請選擇對應的地震儀連接埠裝置。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/firmware-2.jpg)
+
+#### 第 7 步
+
+接著工具會去搜尋遠端的資料庫檔案，搜尋完成後，請選擇對應的地震儀型號。
+
+:::warning
+
+請根據您購買的地震儀型號燒入韌體，如果燒入錯誤請重新燒入正確的型號韌體。
+
+:::
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/firmware-3.jpg)
+
+#### 第 8 步
+
+型號選擇完成後，請選擇最新韌體版本。
+
+:::tip
+
+本教學示範使用「ES-Pro」。
+
+:::
+
+:::tip
+
+「(最新，預設)」顯示的地方錯誤，請注意識別。格式: 「年」w 「週」「a、b、c...」。
+
+:::
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/firmware-4.jpg)
+
+#### 第 9 步
+
+看到「🎉 燒錄完成！請重新啟動您的 ESP32 裝置。」後，地震儀會自動重啟。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/firmware-5.jpg)
+
+:::tip
+
+如果是購買 Pro 的版本，在螢幕上會看到現在的韌體版本號。
+
+![download_exptech-device-recovery](../../../static/img/ESP32_Firmware_Update-timyaya8732/ver.jpg)
+
+:::
+
+#### 第 10 步 (最後)
+
+地震儀重新開機完成後，請重新上傳無線網路資料到地震儀。
