@@ -12,3 +12,8 @@ analysis:
   label: Analysis
   permalink: /analysis
   description: Analysis
+
+sharing:
+  label: Sharing
+  permalink: /sharing
+  description: Sharing

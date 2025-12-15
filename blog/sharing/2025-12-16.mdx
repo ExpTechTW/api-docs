@@ -1,0 +1,96 @@
+---
+title: "ExpTech NTP Server"
+description: "ExpTech NTP Server 已經正式上線，提供 SNTP、HTTP 兩種時間同步方式。"
+date: 2025-12-16
+slug: sharing-2025-12-16
+image: /img/ExpTech_Studio_white.png
+authors: [yuyu1015]
+tags: [yuyu1015, sharing]
+keywords: [開發分享]
+---
+
+import ImageLightbox from "@site/src/components/ImageLightbox";
+
+越來越多 ExpTech 相關產品及服務需要時間同步服務，
+因此決定架設一個 NTP Server，提供時間同步服務。
+
+{/* truncate */}
+
+## 舊架構
+
+採用 HTTP 在 Body 提供 Unix Timestamp (text/plain) 的時間同步服務，
+很陽春的設計，因為當時對時間精度沒有特別要求，所以很長一段時間都是維持這個狀態。
+
+## 新架構
+
+在 time.exptech.com.tw (Port 123) 提供 SNTP (UDP) 時間同步服務，
+同時也提供 HTTP 的時間同步服務。
+
+### SNTP
+
+#### 各家 NTP Server 對照
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+    margin: "0 auto 24px auto",
+  }}
+>
+  <div>
+    <h4>Google NTP Server</h4>
+    <ImageLightbox
+      src="/img/sharing/2025-12-16/google.png"
+      alt="Google NTP Server"
+    />
+  </div>
+
+{" "}
+
+<div>
+  <h4>Cloudflare NTP Server</h4>
+  <ImageLightbox
+    src="/img/sharing/2025-12-16/cloudflare.png"
+    alt="Cloudflare NTP Server"
+  />
+</div>
+
+{" "}
+
+<div>
+  <h4>Apple NTP Server</h4>
+  <ImageLightbox
+    src="/img/sharing/2025-12-16/apple.png"
+    alt="Apple NTP Server"
+  />
+</div>
+
+  <div>
+    <h4>TW NTP Server</h4>
+    <ImageLightbox
+      src="/img/sharing/2025-12-16/tw.png"
+      alt="TW NTP Server"
+    />
+  </div>
+</div>
+
+#### ExpTech NTP Server
+
+<ImageLightbox
+  src="/img/sharing/2025-12-16/exptech.png"
+  alt="ExpTech NTP Server"
+/>
+
+### HTTP GET (text/plain)
+
+提供 X-NTP-T2 及 X-NTP-T3 兩個 Header，也可直接利用 Body (向後相容舊架構) 取得 Unix Timestamp。
+
+<ImageLightbox
+  src="/img/sharing/2025-12-16/http.png"
+  alt="ExpTech NTP(HTTP) Server"
+/>
+
+## 總結
+
+SNTP 協議下實測表現優秀，HTTP 協議下也足夠使用，HTTP 提供給無法建立 UDP 的情境如 Web，可依需求選擇使用。
