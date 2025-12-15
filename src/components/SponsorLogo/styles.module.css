@@ -1,0 +1,33 @@
+.container {
+  text-align: center;
+  margin: 32px auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.logo {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo[data-theme="light"] {
+  display: block;
+}
+
+.logo[data-theme="dark"] {
+  display: none;
+}
+
+[data-theme="dark"] .logo[data-theme="light"] {
+  display: none;
+}
+
+[data-theme="dark"] .logo[data-theme="dark"] {
+  display: block;
+}
