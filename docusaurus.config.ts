@@ -70,6 +70,11 @@ const config: Config = {
           label: "產品",
         },
         {
+          to: "/blog",
+          label: "部落格",
+          position: "left",
+        },
+        {
           type: "localeDropdown",
           position: "right",
         },
@@ -111,6 +116,10 @@ const config: Config = {
             {
               label: "部落格",
               to: "/blog",
+            },
+            {
+              label: "Branding",
+              to: "/docs/branding",
             },
             {
               label: "GitHub",

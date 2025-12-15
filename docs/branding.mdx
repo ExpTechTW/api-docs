@@ -1,0 +1,130 @@
+---
+title: Branding 品牌指南
+description: ExpTech Studio 品牌識別指南，包含 Logo、顏色、字體等品牌元素使用規範
+---
+
+# Branding 品牌指南
+
+歡迎使用 ExpTech Studio 品牌資源。本頁面提供品牌識別元素的使用指南，幫助您正確使用我們的品牌資產。
+
+## Logo
+
+### 主要 Logo
+
+ExpTech Studio 的主要 Logo 可在以下位置找到：
+
+- **PNG 格式：** `/img/exptech.png`
+- **白色背景版本：** `/img/ExpTech_Studio_white.png`
+
+### Logo 使用規範
+
+- ✅ **正確使用：**
+
+  - 保持 Logo 的原始比例
+  - 確保 Logo 周圍有足夠的留白空間（建議至少 Logo 高度的 20%）
+  - 在淺色背景上使用深色 Logo，在深色背景上使用淺色 Logo
+
+- ❌ **避免：**
+  - 不要拉伸或變形 Logo
+  - 不要改變 Logo 的顏色
+  - 不要在 Logo 上添加效果（陰影、描邊等）
+  - 不要將 Logo 放在複雜的背景上
+
+## 顏色
+
+### 主要顏色
+
+ExpTech Studio 使用 Docusaurus 主題顏色系統，支援深色和淺色模式。
+
+**主要顏色變數：**
+
+- `--ifm-color-primary`：主要品牌色
+- `--ifm-color-primary-dark`：深色模式下的主要色
+- `--ifm-color-emphasis-*`：強調色系列
+
+### 顏色使用建議
+
+- 使用主題顏色變數以確保在不同模式下的一致性
+- 避免使用硬編碼的顏色值
+- 確保文字與背景有足夠的對比度（符合 WCAG 無障礙標準）
+
+## 字體
+
+### 字體系統
+
+ExpTech Studio 使用 Docusaurus 預設字體系統：
+
+- **正文字體：** 系統預設字體堆疊
+- **程式碼字體：** `var(--ifm-font-family-monospace)`
+- **標題字體：** `var(--ifm-heading-font-family)`
+
+### 字體使用建議
+
+- 保持一致的層級結構（H1, H2, H3 等）
+- 程式碼使用等寬字體
+- 確保字體大小符合可讀性標準
+
+## 品牌元素
+
+### 圖標
+
+- 使用 SVG 格式的圖標以確保清晰度
+- 圖標應與整體設計風格一致
+- 保持圖標的簡潔性
+
+### 圖片
+
+- 使用高解析度圖片（建議至少 2x 解析度）
+- 優化圖片大小以提升載入速度
+- 使用適當的圖片格式（PNG、JPG、WebP）
+
+## 使用範例
+
+### 在文件中引用 Logo
+
+```mdx
+![ExpTech Studio Logo](/img/exptech.png)
+```
+
+### 在 React 組件中使用
+
+```tsx
+import useBaseUrl from "@docusaurus/useBaseUrl";
+
+function MyComponent() {
+  const logoUrl = useBaseUrl("/img/exptech.png");
+  return <img src={logoUrl} alt="ExpTech Studio Logo" />;
+}
+```
+
+## 下載資源
+
+### Logo 檔案
+
+- [ExpTech Studio Logo (PNG)](/img/exptech.png)
+- [ExpTech Studio Logo - 白色背景 (PNG)](/img/ExpTech_Studio_white.png)
+
+### 其他資源
+
+如需其他品牌資源或使用許可，請聯繫 ExpTech Studio 團隊。
+
+## 品牌授權
+
+所有 ExpTech Studio 品牌資產僅供以下用途使用：
+
+- ✅ 官方文件與網站
+- ✅ 社群專案與教學
+- ✅ 非商業用途的展示
+
+如需商業用途或特殊授權，請聯繫我們。
+
+## 聯絡我們
+
+如有任何品牌使用相關問題，歡迎透過以下方式聯繫：
+
+- **GitHub：** [ExpTechTW](https://github.com/ExpTechTW)
+- **Discord：** [ExpTech Discord](https://exptech.com.tw/dc)
+
+---
+
+**最後更新：** 2025-12-16
