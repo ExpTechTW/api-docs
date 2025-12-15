@@ -6,36 +6,52 @@ sidebar_position: 4
 
 ## 概述
 
-QuakeWatch-Pro 是一款專為地震儀 (ES 系列) 設計的配套軟體，可透過 USB Type-C 串列埠 (UART) 連接地震儀，並顯示地震波形資料。
+QuakeWatch-Pro 是一款專為地震儀（ES 系列）設計的配套軟體，可透過 USB Type-C 串列埠（UART）連接地震儀，並即時顯示地震波形資料。
 
-## 環境
+## 環境需求
 
-- [**Python 版本要求：** `3.10` ≤ Python ≤ `3.12`](https://www.python.org/downloads/)
-- [**推薦版本：** Python `3.10`、`3.11` 或 `3.12`](https://www.python.org/downloads/)
+:::tip Python 版本
+
+- **版本要求：** `3.10` ≤ Python ≤ `3.12`
+- **推薦版本：** Python `3.10`、`3.11` 或 `3.12`
+- [前往 Python 官網下載](https://www.python.org/downloads/)
+
+:::
 
 ## 下載
 
-- [GitHub](https://github.com/ExpTechTW/QuakeWatch-Pro)
+import GithubRepoCard from "@site/src/components/GithubRepoCard";
 
-## 準備
+<GithubRepoCard
+  owner="ExpTechTW"
+  repo="QuakeWatch-Pro"
+  displayName="QuakeWatch-Pro"
+  description="專為地震儀設計的配套軟體，可透過 USB 連接並顯示地震波形資料"
+/>
 
-1. 切換到 QuakeWatch-Pro 的目錄
+## 安裝步驟
+
+### 第 1 步：切換到專案目錄
+
+切換到 QuakeWatch-Pro 的目錄：
 
 ```bash
 cd ./Documents/GitHub/QuakeWatch-Pro
 ```
 
-:::tip
+:::tip 路徑設定
 
-路徑根據自己的實際情況修改。
+路徑請根據自己的實際情況修改。
 
 :::
 
-2. （建議）建立虛擬環境
+### 第 2 步：建立虛擬環境（建議）
 
 :::tip 建議使用虛擬環境
 
-**macOS:**
+使用虛擬環境可以避免套件衝突，建議在開始前先建立。
+
+**macOS / Linux:**
 
 ```bash
 python3 -m venv venv
@@ -51,21 +67,25 @@ python -m venv venv
 
 :::
 
-## 安裝依賴
+### 第 3 步：安裝依賴套件
+
+在虛擬環境中安裝所需的依賴套件：
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 執行
+## 使用方式
 
-1. 先執行 `data_collector.py` 收集資料
+### 第 1 步：啟動資料收集程式
+
+先執行 `data_collector.py` 來收集地震儀的資料：
 
 ```bash
 python data_collector.py
 ```
 
-**輸出範例：**
+#### 選擇串列埠
 
 執行後會顯示可用的串列埠列表：
 
@@ -82,7 +102,9 @@ QuakeWatch - ES-Net Serial Data Collector
 請選擇 [0-1] 或 q 退出:
 ```
 
-選擇要收集的串列埠，輸入編號後按下 `Enter` 鍵。
+選擇要使用的串列埠，輸入編號後按下 `Enter` 鍵。
+
+#### 確認連接成功
 
 成功連接後會看到以下輸出：
 
@@ -98,14 +120,15 @@ QuakeWatch - ES-Net Serial Data Collector
 
 這代表資料收集正在正常進行中。
 
+### 第 2 步：啟動波形圖顯示程式
 
-2. 執行 `main.py` 顯示波形圖
+在另一個終端視窗中執行 `main.py` 來顯示波形圖：
 
 ```bash
 python main.py
 ```
 
-**輸出範例：**
+#### 確認程式運行
 
 成功啟動後會看到以下輸出：
 
@@ -125,8 +148,13 @@ QuakeWatch - ES-Net Data Visualization
 
 :::warning 重要提醒
 
-- 請先執行 `data_collector.py` 收集資料，再執行 `main.py` 顯示波形圖
-- **不要**先直接執行 `main.py`
-- **不要**關閉 `data_collector.py` 只執行 `main.py`，否則會導致資料收集不完全
+**執行順序很重要！**
+
+1. ✅ **先執行** `data_collector.py` 收集資料
+2. ✅ **再執行** `main.py` 顯示波形圖
+3. ❌ **不要**先直接執行 `main.py`
+4. ❌ **不要**關閉 `data_collector.py` 只執行 `main.py`，否則會導致資料收集不完全
+
+兩個程式需要**同時運行**才能正常運作。
 
 :::
