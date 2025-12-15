@@ -94,26 +94,6 @@ export default function ImageLightbox({
     setIsDragging(false);
   };
 
-  const handleZoomIn = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const newScale = Math.min(5, scale + 0.25);
-    setScale(newScale);
-  };
-
-  const handleZoomOut = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const newScale = Math.max(0.5, scale - 0.25);
-    setScale(newScale);
-    if (newScale === 1) {
-      setPosition({ x: 0, y: 0 });
-    }
-  };
-
-  const handleReset = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setScale(1);
-    setPosition({ x: 0, y: 0 });
-  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -175,36 +155,6 @@ export default function ImageLightbox({
             >
               ×
             </button>
-            <div className={styles.zoomControls}>
-              <button
-                className={styles.zoomButton}
-                onClick={handleZoomIn}
-                disabled={scale >= 5}
-                aria-label="放大"
-                title="放大 (+)"
-              >
-                +
-              </button>
-              <button
-                className={styles.zoomButton}
-                onClick={handleZoomOut}
-                disabled={scale <= 0.5}
-                aria-label="縮小"
-                title="縮小 (-)"
-              >
-                −
-              </button>
-              {scale !== 1 && (
-                <button
-                  className={styles.zoomButton}
-                  onClick={handleReset}
-                  aria-label="重置縮放"
-                  title="重置縮放 (100%)"
-                >
-                  ↻
-                </button>
-              )}
-            </div>
             <div className={styles.imageContainer}>
               <img
                 ref={imageRef}
