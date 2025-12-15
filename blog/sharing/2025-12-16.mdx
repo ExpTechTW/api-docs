@@ -1,6 +1,6 @@
 ---
 title: "ExpTech NTP Server"
-description: "ExpTech NTP Server 已經正式上線，提供 SNTP、HTTP 兩種時間同步方式。"
+description: "越來越多 ExpTech 相關產品及服務需要時間同步服務，在 ttyAMA0 的幫助下，架設了 ExpTech NTP Server，同時整理了舊的時間同步機制。"
 date: 2025-12-16
 slug: sharing-2025-12-16
 image: /img/ExpTech_Studio_white.png
@@ -10,23 +10,28 @@ keywords: [開發分享]
 ---
 
 import ImageLightbox from "@site/src/components/ImageLightbox";
+import GithubUserCard from "@site/src/components/GithubUserCard";
 
 越來越多 ExpTech 相關產品及服務需要時間同步服務，
-因此決定架設一個 NTP Server，提供時間同步服務。
+在 <GithubUserCard username="bclswl0827" displayName="ttyAMA0" /> 的幫助下，
+剛好有這個機會，加上我自己小小加料一下，
+就有了這個 ExpTech NTP Server，此外也順便一起把舊的時間同步機制整理一下。
 
 {/* truncate */}
 
 ## 舊架構
 
-採用 HTTP 在 Body 提供 Unix Timestamp (text/plain) 的時間同步服務，
-很陽春的設計，因為當時對時間精度沒有特別要求，所以很長一段時間都是維持這個狀態。
+早期是用一個很簡單的 HTTP 服務，在 Body 回傳 Unix Timestamp（`text/plain`）。
+因為當時對時間精度沒有特別要求，所以這個「陽春版」其實撐了滿長一段時間。
 
 ## 新架構
 
-在 time.exptech.com.tw (Port 123) 提供 SNTP (UDP) 時間同步服務，
-同時也提供 HTTP 的時間同步服務。
+現在改成在 `time.exptech.com.tw:123` 提供 **SNTP（UDP）** 時間同步服務，
+同時保留 **HTTP** 介面，方便在無法用 UDP 的環境（例如 Web）也能對時。
 
 ### SNTP
+
+先拿幾個常見的公共 NTP Server 來對照一下：
 
 #### 各家 NTP Server 對照
 
@@ -77,20 +82,30 @@ import ImageLightbox from "@site/src/components/ImageLightbox";
 
 #### ExpTech NTP Server
 
+最後是主角 ExpTech 自家的 NTP Server：
+
 <ImageLightbox
   src="/img/sharing/2025-12-16/exptech.png"
   alt="ExpTech NTP Server"
 />
 
-### HTTP GET (text/plain)
+### HTTP GET（text/plain）
 
-提供 X-NTP-T2 及 X-NTP-T3 兩個 Header，也可直接利用 Body (向後相容舊架構) 取得 Unix Timestamp。
+除了 SNTP 以外，也可以用 HTTP 的方式取得時間：
+
+- 會在 Header 回傳 `X-NTP-T2`、`X-NTP-T3`
+- 同時也會在 Body 回傳 Unix Timestamp（向下相容舊架構）
 
 <ImageLightbox
   src="/img/sharing/2025-12-16/http.png"
-  alt="ExpTech NTP(HTTP) Server"
+  alt="ExpTech NTP (HTTP) Server"
 />
 
 ## 總結
 
-SNTP 協議下實測表現優秀，HTTP 協議下也足夠使用，HTTP 提供給無法建立 UDP 的情境如 Web，可依需求選擇使用。
+實測結果：
+
+- **SNTP 協議**：誤差約 **±5ms**，精度表現很好，實測結果相當穩定
+- **HTTP 協議**：誤差約 **±50ms**（主要是 TCP 開銷），雖然精度沒有 SNTP 那麼理想，但在 Web 等無法使用 UDP 的情境下，非常實用
+
+依照實際使用環境選擇 SNTP 或 HTTP，就能在不同平台上都維持不錯的時間同步效果。
