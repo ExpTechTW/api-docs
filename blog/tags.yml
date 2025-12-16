@@ -3,6 +3,11 @@ yuyu1015:
   permalink: /yuyu1015
   description: YuYu1015
 
+pisces-xd:
+  label: PiscesXD
+  permalink: /pisces-xd
+  description: PiscesXD
+
 rca:
   label: RCA
   permalink: /rca
@@ -17,3 +22,18 @@ sharing:
   label: Sharing
   permalink: /sharing
   description: Sharing
+
+cve:
+  label: CVE
+  permalink: /cve
+  description: CVE
+
+next-js:
+  label: Next.js
+  permalink: /next-js
+  description: Next.js
+
+docker:
+  label: Docker
+  permalink: /docker
+  description: Docker

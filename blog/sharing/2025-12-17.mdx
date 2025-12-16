@@ -5,12 +5,13 @@ date: 2025-12-17
 slug: sharing-2025-12-17
 image: /img/ExpTech_Studio_white.png
 authors: [PiscesXD]
-tags: [PiscesXD, sharing, CVE, Next.js, Docker]
+tags: [pisces-xd, sharing, cve, next-js, docker]
 keywords: [開發分享, Next.js, 安全漏洞, CVE, Docker]
 ---
 
 import SeverityBadge from "@site/src/components/SeverityBadge";
 import StatusBadge from "@site/src/components/StatusBadge";
+import ImageLightbox from "@site/src/components/ImageLightbox";
 
 <SeverityBadge level="high" />
 <StatusBadge status="resolved" />
@@ -28,47 +29,82 @@ CVE-2025-66478 是一個影響 Next.js 的嚴重安全漏洞，源自 React Serv
 - **漏洞類型：** 遠端程式碼執行 (Remote Code Execution)
 - **攻擊向量：** 網路攻擊，無需身份驗證
 
-## 敘說
+## 心得與過程
 
-一開始知道這個漏洞時，我以為這個漏洞只是一個小問題，後來才發現自己的 IP 被 Cloudflare 列入黑名單後，才意識到事情的嚴重性。
-平常使用的 Docker 卻拯救了伺服器，因為前端後端分離設計，讓攻擊者無法讀取後端一些敏感數據，且也沒有掛載實體檔案所以入侵到宿主機的機率偏低
-，只需要重新 Build 部署和更新 Next.js版本，就可以解決大部分問題，因為重新 Build 會變成一個乾淨的環境。
+一開始看到這個漏洞公告時，其實還以為只是「又一個框架安全更新」，沒有特別在意。  
+直到自己的 IP 被 Cloudflare 列入黑名單之後，才真正意識到事情不單純，背後很可能已經有人在主動嘗試攻擊。
+
+所幸平常習慣使用 Docker 部署，再加上前後端分離設計，讓這次事件的實際影響相對有限：
+
+- 攻擊者無法直接讀取後端服務的敏感資料
+- 沒有將實體檔案系統掛載進容器，入侵到宿主機的風險相對較低
+
+最後只需要重新 Build 映像並重新部署，同時更新 Next.js 版本，就能把環境還原成乾淨狀態，算是有驚無險的一次經驗。
 
 ## 漏洞詳情
 
 ### 技術細節
 
-CVE-2025-66478 源於 React 的上游實作（CVE-2025-55182），在特定條件下，攻擊者可以透過漏洞的構造請求，觸發伺服器端的未預期執行路徑，從而實現遠端執行腳本或指令。
+CVE-2025-66478 源於 React 的上游實作（CVE-2025-55182），在特定條件下，攻擊者可以透過精心構造的請求，觸發伺服器端未預期的執行路徑，進而達成在伺服器上遠端執行腳本或指令。
 
 #### 漏洞成因
 
 1. **React Server Components (RSC) 協議缺陷**
-   - RSC 協議在處理特定請求時存在安全漏洞
-   - 攻擊者可構造惡意請求繞過安全檢查
+
+   - RSC 協議在處理特定型態的請求時存在安全漏洞
+   - 攻擊者可以透過惡意請求繞過部分安全檢查
 
 2. **執行路徑控制**
-   - 漏洞允許攻擊者控制伺服器端的程式碼執行流程
-   - 可繞過現有的安全防護機制
+   - 漏洞允許攻擊者影響伺服器端的程式碼執行流程
+   - 在某些情況下，可能繞過原本預期的安全防護機制
 
 #### 攻擊方式
 
-當時發現攻擊者連線進來之後．會先嘗試讀取一些伺服器已安裝的套件，在嘗試下載腳本並執行．
+實際觀察到的攻擊行為大致如下：
 
-目前所遇到腳本類型有:
-- **偽裝的Nginx**
+- 攻擊者連線進來後，會先偵測伺服器上已安裝的套件與環境
+- 接著嘗試從遠端下載惡意腳本並在伺服器上執行
+
+目前實際遇到的腳本類型包含：
+
+- **偽裝成 Nginx 的程式或服務**
 - **挖礦腳本**
-- **後門腳本** (含開機腳本相當可怕)
-- **架設VPN**
-- **powershell腳本**
+- **後門腳本**（包含開機自動執行的腳本，持久性很強）
+- **架設 VPN / Proxy 的腳本**
+- **PowerShell 腳本**（針對 Windows 環境）
 
-下方圖片是其中一個腳本：
-![](/img/sharing/2025-12-17/image.png)
+下方是其中一個惡意腳本的內容截圖（已對部分資訊進行遮蔽處理）：
+
+<ImageLightbox
+  src="/img/sharing/2025-12-17/image.png"
+  alt="惡意腳本截圖"
+  title="惡意腳本截圖"
+/>
 
 ## 參考資源
 
 - [Next.js 官方安全公告](https://nextjs.org/blog/CVE-2025-66478)
 - [React CVE-2025-55182](https://github.com/facebook/react/security/advisories)
 
+## 相關日誌記錄
+
+import GithubRepoCard from "@site/src/components/GithubRepoCard";
+
+<GithubRepoCard
+  owner="ExpTechTW"
+  repo="CVE-2025-66478"
+  displayName="CVE-2025-66478"
+  description="Next.js 的 CVE-2025-66478 漏洞詳情"
+/>
+
 ## 總結
 
-CVE-2025-66478 是一個極為嚴重的安全漏洞（CVSS 10.0），可能導致伺服器完全被攻擊者控制。這次事ㄌ件過後我會更加注重伺服器的安全性，避免類似的問題再次發生，且多關注有關 CVE 的資訊。
+CVE-2025-66478 是一個極為嚴重的安全漏洞（CVSS 10.0），在最壞情況下甚至可能讓伺服器完全落入攻擊者手中。  
+這次事件之後，我會更加重視伺服器的安全性，包含：
+
+- 優先更新與安全性相關的套件與框架版本
+- 持續關注 CVE 與官方安全公告
+- 部署時盡量使用容器化與最小權限原則，降低實際損害範圍
+
+也算是被這次事件好好上了一課：  
+**安全性更新不是「之後再說」的選項，而是需要排進日常維護流程裡的必修課。**
